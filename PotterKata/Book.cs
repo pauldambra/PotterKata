@@ -2,9 +2,9 @@
 {
     public class Book
     {
-        public bool Equals(Book other)
+        protected bool Equals(Book other)
         {
-            return string.Equals(Name, other.Name);
+            return PositionInSet == other.PositionInSet;
         }
 
         public override bool Equals(object that)
@@ -15,19 +15,24 @@
 
         public override int GetHashCode()
         {
-            return (Name != null ? Name.GetHashCode() : 0);
+            return PositionInSet;
         }
 
-        public Book(string name)
+        private Book(int positionInSet)
         {
-            Name = name;
+            PositionInSet = positionInSet;
         }
 
-        public string Name { get; private set; }
+        public int PositionInSet { get; private set; }
 
         public override string ToString()
         {
-            return Name;
+            return string.Format("Book at {0} in set", PositionInSet);
+        }
+
+        public static Book AtPositionInSet(int positionInSet)
+        {
+            return new Book(positionInSet);
         }
     }
 }

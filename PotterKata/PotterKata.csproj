@@ -49,7 +49,7 @@
     <Compile Include="BasketTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BookSet.cs" />
-    <Compile Include="SetOrdering.cs" />
+    <Compile Include="SetOrderingTests.cs" />
     <Compile Include="BookSetPriceCalculator.cs" />
   </ItemGroup>
   <ItemGroup>

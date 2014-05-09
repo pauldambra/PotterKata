@@ -22,7 +22,7 @@ namespace PotterKata
         [Test]
         public void CanAddABookAtEightEuros()
         {
-            _basket.Add(new Book("first"));
+            _basket.Add(Book.AtPositionInSet(1));
             var total = _basket.Total();
             Assert.AreEqual(8M, total);
         }
@@ -30,8 +30,8 @@ namespace PotterKata
         [Test]
         public void CanAddTwoOFTheSameBooksAtSixteenEuros()
         {
-            _basket.Add(new Book("first"));
-            _basket.Add(new Book("first"));
+            _basket.Add(Book.AtPositionInSet(1));
+            _basket.Add(Book.AtPositionInSet(1));
             var total = _basket.Total();
             Assert.AreEqual(16M, total);
         }
@@ -39,8 +39,8 @@ namespace PotterKata
         [Test]
         public void CanAddTwoOFDifferentBookForFivePercentOff()
         {
-            _basket.Add(new Book("first"));
-            _basket.Add(new Book("second"));
+            _basket.Add(Book.AtPositionInSet(1));
+            _basket.Add(Book.AtPositionInSet(2));
             var total = _basket.Total();
             Assert.AreEqual(15.2M, total);
         }
@@ -48,9 +48,9 @@ namespace PotterKata
         [Test]
         public void CanAddMixedBasketAndApplyDiscountToCorrectBooks()
         {
-            _basket.Add(new Book("first"));
-            _basket.Add(new Book("first"));
-            _basket.Add(new Book("second"));
+            _basket.Add(Book.AtPositionInSet(1));
+            _basket.Add(Book.AtPositionInSet(1));
+            _basket.Add(Book.AtPositionInSet(2));
             var total = _basket.Total();
             Assert.AreEqual(23.2M, total);
         }
@@ -58,9 +58,9 @@ namespace PotterKata
         [Test]
         public void CanAddThreeDifferentBookForTenPercentOff()
         {
-            _basket.Add(new Book("first"));
-            _basket.Add(new Book("second"));
-            _basket.Add(new Book("third"));
+            _basket.Add(Book.AtPositionInSet(1));
+            _basket.Add(Book.AtPositionInSet(2));
+            _basket.Add(Book.AtPositionInSet(3));
             var total = _basket.Total();
             Assert.AreEqual(21.6M, total);
         }
@@ -68,10 +68,10 @@ namespace PotterKata
         [Test]
         public void CanAddFourDifferentBookForTwentyPercentOff()
         {
-            _basket.Add(new Book("first"));
-            _basket.Add(new Book("second"));
-            _basket.Add(new Book("third"));
-            _basket.Add(new Book("fourth"));
+            _basket.Add(Book.AtPositionInSet(1));
+            _basket.Add(Book.AtPositionInSet(2));
+            _basket.Add(Book.AtPositionInSet(3));
+            _basket.Add(Book.AtPositionInSet(4));
             var total = _basket.Total();
             Assert.AreEqual(25.6M, total);
         }
@@ -79,11 +79,11 @@ namespace PotterKata
         [Test]
         public void CanAddFiveDifferentBookForTwentyFivePercentOff()
         {
-            _basket.Add(new Book("first"));
-            _basket.Add(new Book("second"));
-            _basket.Add(new Book("third"));
-            _basket.Add(new Book("fourth"));
-            _basket.Add(new Book("five"));
+            _basket.Add(Book.AtPositionInSet(1));
+            _basket.Add(Book.AtPositionInSet(2));
+            _basket.Add(Book.AtPositionInSet(3));
+            _basket.Add(Book.AtPositionInSet(4));
+            _basket.Add(Book.AtPositionInSet(5));
             var total = _basket.Total();
             Assert.AreEqual(30M, total);
         }
@@ -91,14 +91,14 @@ namespace PotterKata
         [Test]
         public void KataAcceptanceTest()
         {
-            _basket.Add(new Book("first"));
-            _basket.Add(new Book("first"));
-            _basket.Add(new Book("second"));
-            _basket.Add(new Book("second"));
-            _basket.Add(new Book("third"));
-            _basket.Add(new Book("third"));
-            _basket.Add(new Book("fourth"));
-            _basket.Add(new Book("five"));
+            _basket.Add(Book.AtPositionInSet(1));
+            _basket.Add(Book.AtPositionInSet(1));
+            _basket.Add(Book.AtPositionInSet(2));
+            _basket.Add(Book.AtPositionInSet(2));
+            _basket.Add(Book.AtPositionInSet(3));
+            _basket.Add(Book.AtPositionInSet(3));
+            _basket.Add(Book.AtPositionInSet(4));
+            _basket.Add(Book.AtPositionInSet(5));
             var total = _basket.Total();
             Assert.AreEqual(51.2M, total);
         }

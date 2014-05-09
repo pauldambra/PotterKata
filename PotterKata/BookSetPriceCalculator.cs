@@ -2,6 +2,8 @@
 
 namespace PotterKata
 {
+    using System.Linq;
+
     internal class BookSetPriceCalculator
     {
         private readonly Dictionary<int, decimal> _discountByCount = new Dictionary<int, decimal>
@@ -14,10 +16,11 @@ namespace PotterKata
 
         internal decimal GetPriceFor(BookSet bookSet)
         {
-            var discountMultiplier = _discountByCount.ContainsKey(bookSet.Books.Count) 
-                ? _discountByCount[bookSet.Books.Count] 
+            var countOfBooksInSet = bookSet.Books.Count(b => b!=null);
+            var discountMultiplier = _discountByCount.ContainsKey(countOfBooksInSet)
+                ? _discountByCount[countOfBooksInSet] 
                 : 1;
-            return (bookSet.Books.Count*8M)*discountMultiplier;
+            return (countOfBooksInSet * 8M) * discountMultiplier;
         }
     }
 }

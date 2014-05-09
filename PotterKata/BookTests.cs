@@ -7,16 +7,16 @@ namespace PotterKata
         [Test]
         public void TwoBooksWithTheSameNameAreEqual()
         {
-            var left = new Book("first");
-            var right = new Book("first");
+            var left = Book.AtPositionInSet(1);
+            var right = Book.AtPositionInSet(1);
             Assert.AreEqual(left, right);
         }
 
         [Test]
         public void TwoBooksWithDifferentNamesAreNotEqual()
         {
-            var left = new Book("first");
-            var right = new Book("second");
+            var left = Book.AtPositionInSet(1);
+            var right = Book.AtPositionInSet(2);
             Assert.AreNotEqual(left, right);
         }
     }
