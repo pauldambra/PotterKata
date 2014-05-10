@@ -65,7 +65,53 @@ namespace PotterKata
         [Test]
         public void GetSensibleErrorMessageWhenAddingBookThatDoesNotFitInSet()
         {
-            Assert.Throws<IndexOutOfRangeException>(() => BookSet.OrderBooksIntoSets(new[] { Book.AtPositionInSet(9) }));
+            Assert.Throws<IndexOutOfRangeException>(() => BookSet.OrderBooksIntoSets(new List<Book> { Book.AtPositionInSet(9) }));
+        }
+
+        [Test]
+        public void OrderingChoosesTheLargestSetsOverMostComplete()
+        {
+            var books = new List<Book>
+                {
+                    Book.AtPositionInSet(1),
+                    Book.AtPositionInSet(1),
+                    Book.AtPositionInSet(2),
+                    Book.AtPositionInSet(2),
+                    Book.AtPositionInSet(3),
+                    Book.AtPositionInSet(3),
+                    Book.AtPositionInSet(4),
+                    Book.AtPositionInSet(5),
+                };
+            var sets = BookSet.OrderBooksIntoSets(books);
+            Assert.AreEqual(2, sets.Count);
+            Assert.IsTrue(sets.All(s=>s.Books.Count(b=>b!=null)==4));
+        }
+
+        [Test]
+        public void OrderingChoosesTheLargestSetsOverMostComplete_WhenThereShouldBeThreeSets()
+        {
+            var books = new List<Book>
+                {
+                    Book.AtPositionInSet(1),
+                    Book.AtPositionInSet(1),
+                    Book.AtPositionInSet(1),
+                    Book.AtPositionInSet(2),
+                    Book.AtPositionInSet(2),
+                    Book.AtPositionInSet(3),
+                    Book.AtPositionInSet(3),
+                    Book.AtPositionInSet(3),
+                    Book.AtPositionInSet(4),
+                    Book.AtPositionInSet(4),
+                    Book.AtPositionInSet(5),
+                };
+            //should sort as
+            //1,2,3,4
+            //1,2,3,4
+            //1,3,5
+            var sets = BookSet.OrderBooksIntoSets(books);
+            Assert.AreEqual(3, sets.Count);
+            Assert.AreEqual(2, sets.Count(s => s.Books.Count(b => b != null) == 4));
+            Assert.AreEqual(1, sets.Count(s => s.Books.Count(b => b != null) == 3));
         }
     }
 }

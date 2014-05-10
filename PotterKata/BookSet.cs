@@ -16,33 +16,67 @@ namespace PotterKata
         
         private bool ContainsBook(Book book)
         {
-            return Books.ElementAt(book.PositionInSet -1) != null;
+            return Books.Length >= book.PositionInSet 
+                && Books.ElementAt(book.PositionInSet -1) != null;
         }
 
-        internal static List<BookSet> OrderBooksIntoSets(IEnumerable<Book> books, int setSize = 5)
+        internal void AddBook(Book book)
         {
-            var sets = new List<BookSet>();
-           
-            foreach (var book in books)
+            if (ContainsBook(book))
             {
-                var firstSetWithoutBook = FirstSetWithoutBook(sets, book);
-                if (firstSetWithoutBook == null)
+                throw new ArgumentException("This set already contains this book.");
+            }
+            Books[book.PositionInSet - 1] = book;
+        }
+
+        internal static List<BookSet> OrderBooksIntoSets(List<Book> books, int setSize = 5)
+        {
+            if (!books.Any())
+            {
+                return new List<BookSet>();
+            }
+
+            var positionFrequency = books.GroupBy(b => b.PositionInSet)
+                .Select(grp => new { grp.Key, Value = grp.ToList() })
+                .ToDictionary(grp => grp.Key, grp => grp.Value );
+
+            var highestFrequency = positionFrequency.Values.Max(v=>v.Count);
+
+            var sets = new BookSet[highestFrequency];
+            foreach (var i in Enumerable.Range(0,highestFrequency))
+            {
+                sets[i] = new BookSet(setSize);
+            }
+           
+            foreach (var position in positionFrequency.OrderByDescending(v=>v.Value.Count))
+            {
+                for (var i = 0; i < position.Value.Count; i++)
                 {
-                    var set = new BookSet(setSize);
-                    set.Books[book.PositionInSet-1] = book;
-                    sets.Add(set);
-                }
-                else
-                {
-                    firstSetWithoutBook.Books[book.PositionInSet-1] = book;
+                    var closurePosition = position;
+                    var book = closurePosition.Value.ElementAt(i);
+                    if (position.Value.Count == 1)
+                    {
+                        var shortestCandidateSet = ShortestSetWithoutBook(sets, book);
+                        shortestCandidateSet.AddBook(book);
+                    }
+                    else
+                    {
+                        sets.ElementAt(i).AddBook(book);
+                    }
                 }
             }
-            return sets;
+            return sets.ToList();
         }
 
-        private static BookSet FirstSetWithoutBook(IEnumerable<BookSet> sets, Book book)
+        private static BookSet ShortestSetWithoutBook(IEnumerable<BookSet> sets, Book book)
         {
-            return sets.FirstOrDefault(s => !s.ContainsBook(book));
+            return sets.OrderBy(s => s.Books.Count(b => b != null))
+                       .FirstOrDefault(s => !s.ContainsBook(book));
+        }
+
+        public override string ToString()
+        {
+            return string.Format("Book Set containing {0} books", Books.Count(b=>b!=null));
         }
     }
 }
