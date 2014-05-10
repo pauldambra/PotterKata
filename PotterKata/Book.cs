@@ -2,7 +2,8 @@
 {
     public class Book
     {
-        protected bool Equals(Book other)
+        #region overriden methods
+        private bool Equals(Book other)
         {
             return PositionInSet == other.PositionInSet;
         }
@@ -18,19 +19,20 @@
             return PositionInSet;
         }
 
-        private Book(int positionInSet)
-        {
-            PositionInSet = positionInSet;
-        }
-
-        public int PositionInSet { get; private set; }
-
         public override string ToString()
         {
             return string.Format("Book at {0} in set", PositionInSet);
         }
+        #endregion
 
-        public static Book AtPositionInSet(int positionInSet)
+        public int PositionInSet { get; private set; }
+
+        private Book(int positionInSet)
+        {
+            PositionInSet = positionInSet;
+        }
+        
+        public static Book CreateAtPositionInSet(int positionInSet)
         {
             return new Book(positionInSet);
         }

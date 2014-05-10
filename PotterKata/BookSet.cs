@@ -20,7 +20,7 @@ namespace PotterKata
                 && Books.ElementAt(book.PositionInSet -1) != null;
         }
 
-        internal void AddBook(Book book)
+        private void AddBook(Book book)
         {
             if (ContainsBook(book))
             {
@@ -31,23 +31,12 @@ namespace PotterKata
 
         internal static List<BookSet> OrderBooksIntoSets(List<Book> books, int setSize = 5)
         {
-            if (!books.Any())
-            {
-                return new List<BookSet>();
-            }
+            if (!books.Any()) { return new List<BookSet>(); }
 
-            var positionFrequency = books.GroupBy(b => b.PositionInSet)
-                .Select(grp => new { grp.Key, Value = grp.ToList() })
-                .ToDictionary(grp => grp.Key, grp => grp.Value );
-
+            var positionFrequency = GetBookPositionFrequencyMap(books);
             var highestFrequency = positionFrequency.Values.Max(v=>v.Count);
+            var sets = InitialiseEnoughSetsForHighestFrequencyBook(setSize, highestFrequency);
 
-            var sets = new BookSet[highestFrequency];
-            foreach (var i in Enumerable.Range(0,highestFrequency))
-            {
-                sets[i] = new BookSet(setSize);
-            }
-           
             foreach (var position in positionFrequency.OrderByDescending(v=>v.Value.Count))
             {
                 for (var i = 0; i < position.Value.Count; i++)
@@ -56,8 +45,7 @@ namespace PotterKata
                     var book = closurePosition.Value.ElementAt(i);
                     if (position.Value.Count == 1)
                     {
-                        var shortestCandidateSet = ShortestSetWithoutBook(sets, book);
-                        shortestCandidateSet.AddBook(book);
+                        AddBookToShortestSetThatDoesNotContainIt(sets, book);
                     }
                     else
                     {
@@ -66,6 +54,31 @@ namespace PotterKata
                 }
             }
             return sets.ToList();
+        }
+
+        private static void AddBookToShortestSetThatDoesNotContainIt(IEnumerable<BookSet> sets, Book book)
+        {
+            var shortestCandidateSet = ShortestSetWithoutBook(sets, book);
+            shortestCandidateSet.AddBook(book);
+        }
+
+        private static BookSet[] InitialiseEnoughSetsForHighestFrequencyBook(int setSize, int highestFrequency)
+        {
+            var sets = new BookSet[highestFrequency];
+
+            foreach (var i in Enumerable.Range(0, highestFrequency))
+            {
+                sets[i] = new BookSet(setSize);
+            }
+            return sets;
+        }
+
+        private static Dictionary<int, List<Book>> GetBookPositionFrequencyMap(IEnumerable<Book> books)
+        {
+            return books
+                .GroupBy(b => b.PositionInSet)
+                .Select(grp => new { grp.Key, Value = grp.ToList() })
+                .ToDictionary(grp => grp.Key, grp => grp.Value );
         }
 
         private static BookSet ShortestSetWithoutBook(IEnumerable<BookSet> sets, Book book)
