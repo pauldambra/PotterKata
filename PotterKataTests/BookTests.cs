@@ -1,6 +1,7 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
+using PotterKata;
 
-namespace PotterKata
+namespace PotterKataTests
 {
     public class BookTests
     {
